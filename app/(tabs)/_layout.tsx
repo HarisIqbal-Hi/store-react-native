@@ -4,10 +4,9 @@ import { Slot, Stack } from 'expo-router'
 
 const TabLayout = () => {
   return (
-    // <Stack>
-    //     <Stack.Screen name='home' options={{headerShown:false}}/>
-    // </Stack>
-    <Slot/>
+    <View>
+      <Text>TabLayout</Text>
+    </View>
   )
 }
 
