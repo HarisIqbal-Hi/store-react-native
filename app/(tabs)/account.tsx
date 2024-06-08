@@ -1,11 +1,14 @@
-import { View, Text, SafeAreaView } from "react-native";
+import { View, Text } from "react-native";
 import React from "react";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const Account = () => {
   return (
-    <View className="bg-primary flex-1 items-center justify-center">
-      <Text className="color-white">Account</Text>
-    </View>
+    <SafeAreaView className='bg-primary h-full'>
+      <View className='w-full my-6 px-4'>
+        <Text className='text-white text-4xl'>Account</Text>
+      </View>
+    </SafeAreaView>
   );
 };
 

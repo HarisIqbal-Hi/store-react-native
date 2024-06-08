@@ -1,11 +1,33 @@
-import { View, Text } from 'react-native'
+import { View, Text, FlatList } from 'react-native'
 import React from 'react'
+import { SafeAreaView } from 'react-native-safe-area-context'
 
 const Home = () => {
+
+  const RenderItem = () => {
+    return (
+      <View>
+
+      </View>
+    )
+  }
+
+  const HeaderCompnent = () => {
+    return (
+      <View className='px-4 my-6'>
+        <Text className='text-white text-4xl'>Home</Text>
+      </View>
+    )
+  }
+
   return (
-    <View className='flex-1 justify-center items-center'>
-      <Text>Home</Text>
-    </View>
+    <SafeAreaView className='bg-primary h-full'>
+      <FlatList
+        data={[]}
+        renderItem={RenderItem}
+        ListHeaderComponent={HeaderCompnent}
+      />
+    </SafeAreaView>
   )
 }
 
