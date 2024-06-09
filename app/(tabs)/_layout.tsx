@@ -12,7 +12,7 @@ interface TabBarType {
 }
 
 const TabIcon = ({ icon, color, name, focused }:TabBarType) => {
-  console.log("1 icon",icon,color)
+  
   return (
     <View className="flex items-center justify-center gap-2">
       <Image

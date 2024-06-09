@@ -7,7 +7,10 @@ import { icons } from "@/constants";
 import CustomFormType, { WeightPriceType } from "../types/create/CustomFormType";
 
 const CreateCustom = () => {
-  const [form, setForm] = useState<CustomFormType>()
+  const [forms, setForms] = useState<CustomFormType>({
+    itemName: "",
+    weightPrice: []
+  })
   const [weightPrice, setWeightPrice] = useState<WeightPriceType[]> ([{
     weight: 0,
     price: 0
@@ -16,25 +19,34 @@ const CreateCustom = () => {
 
   const handleAddInstance = () => {
     setWeightPrice([...weightPrice, { weight: 0, price: 0 }]);
+    setForms({...forms,weightPrice:weightPrice})
   };
 
   const handleRemoveInstance = (index: number) => {
     const updatedWeightPrice = [...weightPrice];
     updatedWeightPrice.splice(index, 1);
     setWeightPrice(updatedWeightPrice);
+    setForms({...forms,weightPrice:updatedWeightPrice})
   };
 
   const handleChangePrice = (price: number, index: number) => {
     const updatedWeighPrices = [...weightPrice];
     updatedWeighPrices[index].price = price;
     setWeightPrice(updatedWeighPrices);
+    setForms({...forms,weightPrice:updatedWeighPrices})
   };
 
   const handleChangeWeight = (weight: number, index: number) => {
     const updatedWeighPrices = [...weightPrice];
     updatedWeighPrices[index].weight = weight;
     setWeightPrice(updatedWeighPrices);
+    setForms({...forms,weightPrice:updatedWeighPrices})
   };
+
+  const handleChangeItemName = (value: string) => {
+    setForms({...forms, itemName: value});
+  };
+
 
   return (
     <SafeAreaView className="bg-primary h-full">
@@ -44,8 +56,8 @@ const CreateCustom = () => {
           <View className="mt-10">
             <FormField
               title="Item Name"
-              handleChangeText={(e) => {}}
-              value=""
+              handleChangeText={(e) => {handleChangeItemName(e)}}
+              value={forms.itemName}
             />
             <TouchableOpacity
               onPress={handleAddInstance}
@@ -70,7 +82,7 @@ const CreateCustom = () => {
                 key={index}
               >
                  <FormField
-                  otherStyles="mt-3 flex-1 mx-2"
+                  otherStyles="flex-1 mx-2"
                   title="Weight (g)"
                   handleChangeText={(text) => handleChangeWeight(Number(text), index)}
                   value={String(weighPrice.weight)}
@@ -78,13 +90,13 @@ const CreateCustom = () => {
                 />
                 <FormField
                   keyboardType="numeric"
-                  otherStyles="mt-3 flex-1 mx-2"
+                  otherStyles="flex-1 mx-2"
                   title="Price"
                   value={String(weighPrice.price)}
                   handleChangeText={(text) => handleChangePrice(Number(text), index)}
                 />
                
-                {weightPrice.length > 1 && (
+               {weightPrice.length > 1 && (
                   <TouchableOpacity
                     onPress={() => {handleRemoveInstance(index)}}
                     className="mt-7"
@@ -108,7 +120,7 @@ const CreateCustom = () => {
             <CustomButton
               containerStyles="mt-7"
               title={`Add`}
-              handlePress={() => {}}
+              handlePress={() => {console.log("form",forms)}}
             />
           </View>
         </View>
