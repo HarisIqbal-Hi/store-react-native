@@ -1,24 +1,29 @@
 import { View, Text, TouchableOpacity, Image, ScrollView } from "react-native";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import FormField from "@/components/ui/FormFild";
 import CustomButton from "@/components/ui/CustomButton";
 import { icons } from "@/constants";
-import CustomFormType, { WeightPriceType } from "../types/create/CustomFormType";
+import CustomFormType, { WeightPriceType } from "@/types/create/CustomFormType";
+import { DatabaseContext } from "@/database/useDatabase";
 
 const CreateCustom = () => {
+  const {states, handleInsertCustomData} = useContext(DatabaseContext)
   const [forms, setForms] = useState<CustomFormType>({
+    id: undefined,
     itemName: "",
     weightPrice: []
   })
   const [weightPrice, setWeightPrice] = useState<WeightPriceType[]> ([{
+    id: 0,
     weight: 0,
-    price: 0
+    price: 0,
+    weightUnit: "g"
   }])
 
 
   const handleAddInstance = () => {
-    setWeightPrice([...weightPrice, { weight: 0, price: 0 }]);
+    setWeightPrice([...weightPrice, { id: undefined,weight: 0, price: 0,weightUnit: "g" }]);
     setForms({...forms,weightPrice:weightPrice})
   };
 
@@ -27,6 +32,7 @@ const CreateCustom = () => {
     updatedWeightPrice.splice(index, 1);
     setWeightPrice(updatedWeightPrice);
     setForms({...forms,weightPrice:updatedWeightPrice})
+    
   };
 
   const handleChangePrice = (price: number, index: number) => {
@@ -43,10 +49,21 @@ const CreateCustom = () => {
     setForms({...forms,weightPrice:updatedWeighPrices})
   };
 
+  const handleChangeWeightUnit = (weightUnit: string, index: number) => {
+    const updatedWeighPrices = [...weightPrice];
+    updatedWeighPrices[index].weightUnit = weightUnit;
+    setWeightPrice(updatedWeighPrices);
+    setForms({...forms,weightPrice:updatedWeighPrices})
+  };
+
   const handleChangeItemName = (value: string) => {
     setForms({...forms, itemName: value});
   };
 
+
+  const handleAddPress = () => {
+    handleInsertCustomData(forms)
+  }
 
   return (
     <SafeAreaView className="bg-primary h-full">
@@ -83,7 +100,7 @@ const CreateCustom = () => {
               >
                  <FormField
                   otherStyles="flex-1 mx-2"
-                  title="Weight (g)"
+                  title={`Weight (${weighPrice.weightUnit})`}
                   handleChangeText={(text) => handleChangeWeight(Number(text), index)}
                   value={String(weighPrice.weight)}
                   keyboardType="numeric"
@@ -94,6 +111,13 @@ const CreateCustom = () => {
                   title="Price"
                   value={String(weighPrice.price)}
                   handleChangeText={(text) => handleChangePrice(Number(text), index)}
+                />
+                <FormField
+                  keyboardType="numeric"
+                  otherStyles="flex-1 mx-2"
+                  title="Unit"
+                  value={weighPrice.weightUnit}
+                  handleChangeText={(text) => handleChangeWeightUnit(text, index)}
                 />
                
                {weightPrice.length > 1 && (
@@ -120,7 +144,7 @@ const CreateCustom = () => {
             <CustomButton
               containerStyles="mt-7"
               title={`Add`}
-              handlePress={() => {console.log("form",forms)}}
+              handlePress={handleAddPress}
             />
           </View>
         </View>
