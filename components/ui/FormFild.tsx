@@ -37,7 +37,7 @@ const FormField = ({
           />
         </View>
         {
-          error &&
+          true &&
           <Text className="text-base text-error-100 font-psemibold mt-1">{errorText}</Text>
         }
       </View>

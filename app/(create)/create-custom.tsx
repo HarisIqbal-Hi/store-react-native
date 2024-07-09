@@ -74,26 +74,41 @@ const CreateCustom = () => {
 
 
   const handleAddPress = () => {
-    if (forms.itemName.length === 0) {
-      setCreateError({
-        ...createError,
-        itemEmptyError: "Item name is required",
-        hasError: true
-      })
+    let checkValdation = {
+      hasError: false,
+      itemEmptyError: "",
+      price$WeightEmptyError: ""
+    }
+    if (isEmptyString(forms.itemName)) {
+      checkValdation.hasError = true
+      checkValdation.itemEmptyError = "Item name is required"
+    } else {
+      console.log("no need")
+      checkValdation.itemEmptyError = ""
     }
 
-    weightPrice.forEach(element => {
-      if (element.price === 0 || element.weight === 0) {
-        setCreateError({
-          ...createError,
-          price$WeightEmptyError: "Price and Weight are required",
-          hasError: true
-        })
-      }
-      return
-    });
+    let priceWeightErrorFound = false;
 
-    console.log(forms)
+    for (const element of weightPrice) {
+      if (element.price === 0 || element.weight === 0) {
+        priceWeightErrorFound = true
+        break;
+      }
+    }
+    
+    if (priceWeightErrorFound) {  
+      checkValdation.hasError = true
+      checkValdation.price$WeightEmptyError = "Price and Weight are required"
+    } else {
+      checkValdation.price$WeightEmptyError = ""
+    }
+
+    setCreateError(checkValdation)
+    if (checkValdation.hasError) {
+      return
+    }
+
+    console.log("fine",checkValdation)
     // handleInsertCustomData(forms)
   }
 
@@ -104,10 +119,10 @@ const CreateCustom = () => {
           <Text className="text-white text-4xl">Create Custom</Text>
           <View className="mt-10">
             <FormField
-              title="Item Name"
+              title={`Item Name`}
               handleChangeText={(e) => { handleChangeItemName(e) }}
               value={forms.itemName}
-              error={createError.hasError && isEmptyString(createError.itemEmptyError)}
+              error={createError.hasError && !isEmptyString(createError.itemEmptyError)}
               errorText={createError.itemEmptyError}
             />
             <TouchableOpacity
@@ -175,7 +190,7 @@ const CreateCustom = () => {
                 </View>
               </View>
             ))}
-            <TextError hasError={createError.hasError && isEmptyString(createError.price$WeightEmptyError)} errorText={createError.price$WeightEmptyError}/>
+            <TextError hasError={createError.hasError && !isEmptyString(createError.price$WeightEmptyError)} errorText={createError.price$WeightEmptyError} />
             <CustomButton
               containerStyles="mt-7"
               title={`Add`}
