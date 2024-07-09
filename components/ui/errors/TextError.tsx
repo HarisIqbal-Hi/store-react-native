@@ -16,6 +16,6 @@ export default function TextError(
 ) {
     return (
         (hasError) &&
-        <Text className={`text-base text-error-100 font-psemibold mt-1 ${otherStyle}`}>{errorText}</Text>
+        <Text className={`text-base text-error-100 font-psemibold ${otherStyle}`}>{errorText}</Text>
     )
 }

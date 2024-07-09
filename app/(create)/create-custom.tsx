@@ -162,7 +162,7 @@ const CreateCustom = () => {
                   handleChangeText={(text) => handleChangePrice(Number(text), index)}
                 />
 
-                <View className={`justify-center flex-coloumn items-center gap-2 `}>
+                <View className={`gap-2`}>
                   {weightPrice.length > 1 && (
                     <TouchableOpacity
                       onPress={() => { handleRemoveInstance(index) }}

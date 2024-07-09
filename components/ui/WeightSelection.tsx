@@ -23,7 +23,7 @@ export default function WeightSelection(
     };
 
     return (
-        <View>
+        <>
             <TouchableOpacity
                     onPress={toggleModel}
                   >
@@ -44,6 +44,6 @@ export default function WeightSelection(
                     hanldeUnitValue(unit)
                 }}
             />
-        </View>
+        </>
     )
 }
