@@ -127,7 +127,7 @@ const CreateCustom = () => {
             />
             <TouchableOpacity
               onPress={handleAddInstance}
-              className="mt-7 flex-row  justify-between"
+              className="mt-5 flex-row  justify-between"
             >
               <View className="flex-1"></View>
               <View
@@ -162,7 +162,7 @@ const CreateCustom = () => {
                   handleChangeText={(text) => handleChangePrice(Number(text), index)}
                 />
 
-                <View className={`justify-center flex-coloumn items-center gap-2 ${weightPrice.length > 1 ? "mt-1" : "mt-7"}`}>
+                <View className={`justify-center flex-coloumn items-center gap-2 `}>
                   {weightPrice.length > 1 && (
                     <TouchableOpacity
                       onPress={() => { handleRemoveInstance(index) }}
