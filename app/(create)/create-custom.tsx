@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity, Image, ScrollView } from "react-native";
+import { View, Text, TouchableOpacity, Image, ScrollView, Modal, Pressable } from "react-native";
 import React, { useContext, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import FormField from "@/components/ui/FormFild";
@@ -6,63 +6,95 @@ import CustomButton from "@/components/ui/CustomButton";
 import { icons } from "@/constants";
 import CustomFormType, { WeightPriceType } from "@/types/create/CustomFormType";
 import { DatabaseContext } from "@/database/useDatabase";
+import { BottomSheet, RadioButton } from 'react-native-btr';
+import WeightSelection from "@/components/ui/WeightSelection";
+import isEmptyString from "@/utils/isEmpty";
+import TextError from "@/components/ui/errors/TextError";
 
 const CreateCustom = () => {
-  const {states, handleInsertCustomData} = useContext(DatabaseContext)
+
+  const [createError, setCreateError] = useState({
+    hasError: false,
+    itemEmptyError: "",
+    price$WeightEmptyError: ""
+  })
+
+  const { handleInsertCustomData } = useContext(DatabaseContext)
+
   const [forms, setForms] = useState<CustomFormType>({
     id: undefined,
     itemName: "",
     weightPrice: []
   })
-  const [weightPrice, setWeightPrice] = useState<WeightPriceType[]> ([{
+  const [weightPrice, setWeightPrice] = useState<WeightPriceType[]>([{
     id: 0,
     weight: 0,
     price: 0,
     weightUnit: "g"
   }])
 
-
   const handleAddInstance = () => {
-    setWeightPrice([...weightPrice, { id: undefined,weight: 0, price: 0,weightUnit: "g" }]);
-    setForms({...forms,weightPrice:weightPrice})
+    setWeightPrice([...weightPrice, { id: undefined, weight: 0, price: 0, weightUnit: "g" }]);
+    setForms({ ...forms, weightPrice: weightPrice })
   };
 
   const handleRemoveInstance = (index: number) => {
     const updatedWeightPrice = [...weightPrice];
     updatedWeightPrice.splice(index, 1);
     setWeightPrice(updatedWeightPrice);
-    setForms({...forms,weightPrice:updatedWeightPrice})
-    
+    setForms({ ...forms, weightPrice: updatedWeightPrice })
+
   };
 
   const handleChangePrice = (price: number, index: number) => {
     const updatedWeighPrices = [...weightPrice];
     updatedWeighPrices[index].price = price;
     setWeightPrice(updatedWeighPrices);
-    setForms({...forms,weightPrice:updatedWeighPrices})
+    setForms({ ...forms, weightPrice: updatedWeighPrices })
   };
 
   const handleChangeWeight = (weight: number, index: number) => {
     const updatedWeighPrices = [...weightPrice];
     updatedWeighPrices[index].weight = weight;
     setWeightPrice(updatedWeighPrices);
-    setForms({...forms,weightPrice:updatedWeighPrices})
+    setForms({ ...forms, weightPrice: updatedWeighPrices })
   };
 
   const handleChangeWeightUnit = (weightUnit: string, index: number) => {
+    console.log(weightUnit, index)
     const updatedWeighPrices = [...weightPrice];
     updatedWeighPrices[index].weightUnit = weightUnit;
     setWeightPrice(updatedWeighPrices);
-    setForms({...forms,weightPrice:updatedWeighPrices})
+    setForms({ ...forms, weightPrice: updatedWeighPrices })
   };
 
   const handleChangeItemName = (value: string) => {
-    setForms({...forms, itemName: value});
+    setForms({ ...forms, itemName: value });
   };
 
 
   const handleAddPress = () => {
-    handleInsertCustomData(forms)
+    if (forms.itemName.length === 0) {
+      setCreateError({
+        ...createError,
+        itemEmptyError: "Item name is required",
+        hasError: true
+      })
+    }
+
+    weightPrice.forEach(element => {
+      if (element.price === 0 || element.weight === 0) {
+        setCreateError({
+          ...createError,
+          price$WeightEmptyError: "Price and Weight are required",
+          hasError: true
+        })
+      }
+      return
+    });
+
+    console.log(forms)
+    // handleInsertCustomData(forms)
   }
 
   return (
@@ -73,8 +105,10 @@ const CreateCustom = () => {
           <View className="mt-10">
             <FormField
               title="Item Name"
-              handleChangeText={(e) => {handleChangeItemName(e)}}
+              handleChangeText={(e) => { handleChangeItemName(e) }}
               value={forms.itemName}
+              error={createError.hasError && isEmptyString(createError.itemEmptyError)}
+              errorText={createError.itemEmptyError}
             />
             <TouchableOpacity
               onPress={handleAddInstance}
@@ -93,54 +127,55 @@ const CreateCustom = () => {
                 />
               </View>
             </TouchableOpacity>
-            {weightPrice!.map((weighPrice, index) => (
+            {weightPrice!.map((weighPriceItem, index) => (
               <View
-                className="flex-row justify-between items-center"
+                className="flex-row justify-between items-center mt-3"
                 key={index}
               >
-                 <FormField
+                <FormField
                   otherStyles="flex-1 mx-2"
-                  title={`Weight (${weighPrice.weightUnit})`}
+                  title={`Weight (${weighPriceItem.weightUnit})`}
                   handleChangeText={(text) => handleChangeWeight(Number(text), index)}
-                  value={String(weighPrice.weight)}
+                  value={String(weighPriceItem.weight)}
                   keyboardType="numeric"
                 />
                 <FormField
                   keyboardType="numeric"
                   otherStyles="flex-1 mx-2"
                   title="Price"
-                  value={String(weighPrice.price)}
+                  value={String(weighPriceItem.price)}
                   handleChangeText={(text) => handleChangePrice(Number(text), index)}
                 />
-                <FormField
-                  keyboardType="numeric"
-                  otherStyles="flex-1 mx-2"
-                  title="Unit"
-                  value={weighPrice.weightUnit}
-                  handleChangeText={(text) => handleChangeWeightUnit(text, index)}
-                />
-               
-               {weightPrice.length > 1 && (
-                  <TouchableOpacity
-                    onPress={() => {handleRemoveInstance(index)}}
-                    className="mt-7"
-                  >
-                    <View
-                      className={
-                        "bg-gray-100 rounded-xl opacity-25 justify-center items-center p-2"
-                      }
+
+                <View className={`justify-center flex-coloumn items-center gap-2 ${weightPrice.length > 1 ? "mt-1" : "mt-7"}`}>
+                  {weightPrice.length > 1 && (
+                    <TouchableOpacity
+                      onPress={() => { handleRemoveInstance(index) }}
                     >
-                      <Image
-                        source={icons.close}
-                        resizeMode="contain"
-                        className="w-6 h-6"
-                      />
-                    </View>
-                  </TouchableOpacity>
-                )}
+                      <View
+                        className={
+                          "bg-gray-100 rounded-xl opacity-25 justify-center items-center p-2"
+                        }
+                      >
+                        <Image
+                          source={icons.close}
+                          tintColor="white"
+                          resizeMode="contain"
+                          className="w-6 h-6"
+                        />
+                      </View>
+                    </TouchableOpacity>
+                  )}
+                  <View>
+                    <WeightSelection
+                      weightUnit={weighPriceItem.weightUnit}
+                      hanldeUnitValue={(unitValue) => handleChangeWeightUnit(unitValue, index)}
+                    />
+                  </View>
+                </View>
               </View>
             ))}
-
+            <TextError hasError={createError.hasError && isEmptyString(createError.price$WeightEmptyError)} errorText={createError.price$WeightEmptyError}/>
             <CustomButton
               containerStyles="mt-7"
               title={`Add`}
@@ -154,3 +189,4 @@ const CreateCustom = () => {
 };
 
 export default CreateCustom;
+
