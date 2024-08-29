@@ -16,8 +16,12 @@ export const createTable = async (
             `);
 
     console.log("create table", execute);
-  } catch (err) {
-    console.log("error", err);
+  } catch (err: any) {
+    if (err instanceof Error) {
+      console.error('Error creating table:', err.message);
+    } else {
+      console.error('Error creating table:', err);
+    }
   }
 };
 
@@ -50,7 +54,6 @@ export const setCustomData = async (data: CustomFormType) => {
 
 export const insetCustomData = async (data: CustomFormType) => {
   const { itemName, weightPrice } = data;
-  console.log("insert custom data", data);
   const database = await db;
   try {
     const insertCustom = await database.runAsync(

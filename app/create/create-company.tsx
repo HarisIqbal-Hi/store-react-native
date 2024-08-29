@@ -5,8 +5,10 @@ import FormField from "@/components/ui/FormFild";
 import CustomButton from "@/components/ui/CustomButton";
 import WeightSelection from "@/components/ui/WeightSelection";
 import TextError from "@/components/ui/errors/TextError";
+import CustomFormType, { WeightPriceType } from "@/types/create/CustomFormType";
 
 const CreateCompany = () => {
+  const [weightPrice, setWeightPrice] = useState<string>("g")
   const [createError, setCreateError] = useState({
     hasError: false,
     companyNameError: "",
@@ -22,7 +24,7 @@ const CreateCompany = () => {
       nameError: "",
       priceAndWeighError: ""
     }
-    
+
     if (checkValdation.hasError) {
       return
     }
@@ -61,8 +63,11 @@ const CreateCompany = () => {
               keyboardType="numeric"
             />
             <WeightSelection
-              weightUnit={"g"}
-              hanldeUnitValue={(unitValue) => { console.log('unit', unitValue) }}
+              weightUnit={weightPrice}
+              hanldeUnitValue={(unitValue) => {
+                console.log('unit', unitValue)
+                setWeightPrice(unitValue)
+              }}
             />
           </View>
           <TextError hasError={false} errorText={"Input Error"} />

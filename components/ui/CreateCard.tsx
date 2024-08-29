@@ -3,7 +3,8 @@ import { icons } from '@/constants'
 
 const CreateCard = ({ title,handlePress}: { title: string, handlePress: () => void }) => {
     return (
-      <TouchableOpacity onPress={handlePress} className="flex-1 mx-2">
+      <TouchableOpacity onPress={handlePress} >
+      {/* <TouchableOpacity onPress={handlePress} className="flex-1 mx-2"> */}
         <View className="bg-gray-800 bg-opacity-50 rounded-lg p-4 items-center gap-2">
           <Image
             source={icons.create}

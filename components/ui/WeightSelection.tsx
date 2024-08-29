@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { TouchableOpacity, View, Text } from 'react-native'
+import { TouchableOpacity, View, Text, StyleSheet } from 'react-native'
 import WeightUnitModel from './models/WeightUnitModel'
 
 
@@ -28,6 +28,7 @@ export default function WeightSelection(
                     onPress={toggleModel}
                   >
                     <View
+                    // style={styles.unitButton}
                       className={
                         "bg-gray-100 rounded-xl opacity-25 justify-center items-center p-2"
                       }
@@ -47,3 +48,14 @@ export default function WeightSelection(
         </>
     )
 }
+
+
+const styles = StyleSheet.create({
+  unitButton : {
+    opacity: 0.5,
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding:2,
+
+  }
+})

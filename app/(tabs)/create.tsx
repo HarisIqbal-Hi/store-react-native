@@ -5,23 +5,22 @@ import { router } from "expo-router";
 import CreateCard from "@/components/ui/CreateCard";
 
 const Create = () => {
-  
+
 
   return (
-    <SafeAreaView className="bg-primary h-full">
+    <SafeAreaView className='bg-primary h-full'>
       <View className="w-full h-full my-6 px-4 bg-red">
         <Text className="text-white text-4xl">Create</Text>
-        <View className="flex-1 justify-center">
-          <View className="flex-row">
-            <CreateCard
-              title="Custom Create"
-              handlePress={() => {router.push("/create-custom")}}
-            />
-            <CreateCard
-              title="Company Create"
-              handlePress={() => {router.push("/create-company")}}
-            />
-          </View>
+        <View className="mt-10 flex">
+          <CreateCard
+            title="Custom Create"
+            handlePress={() => { router.push("/create/create-custom?insertType=update") }}
+          />
+          <View className="mt-5" />
+          <CreateCard
+            title="Company Create"
+            handlePress={() => { router.push("/create/create-company") }}
+          />
         </View>
       </View>
     </SafeAreaView>

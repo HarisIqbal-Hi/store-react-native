@@ -1,14 +1,13 @@
-import { View, Text } from 'react-native'
-import React from 'react'
-import { Link } from 'expo-router'
+import { Redirect } from 'expo-router';
+import React from 'react';
+import { StyleSheet, View } from 'react-native';
 
-const Welcome = () => {
-  return (
-    <View className="flex-1 justify-center items-center">
-      <Text className="text-3xl">Welcome </Text>
-      <Link href={"/home"} style={{color:"blue"}}>Go to Profile</Link>
-    </View>
-  )
+const Index = () => {
+    return (
+       <Redirect href="/home" />
+    );
 }
 
-export default Welcome
+const styles = StyleSheet.create({})
+
+export default Index;

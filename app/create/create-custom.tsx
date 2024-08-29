@@ -10,9 +10,10 @@ import { BottomSheet, RadioButton } from 'react-native-btr';
 import WeightSelection from "@/components/ui/WeightSelection";
 import isEmptyString from "@/utils/isEmpty";
 import TextError from "@/components/ui/errors/TextError";
+import { useLocalSearchParams } from "expo-router";
 
 const CreateCustom = () => {
-
+  const {insertType} = useLocalSearchParams()
   const [createError, setCreateError] = useState({
     hasError: false,
     itemEmptyError: "",
@@ -109,6 +110,11 @@ const CreateCustom = () => {
     }
 
     console.log("fine",checkValdation)
+    if (insertType === "update") {
+      
+    } else {
+      
+    }
     // handleInsertCustomData(forms)
   }
 
